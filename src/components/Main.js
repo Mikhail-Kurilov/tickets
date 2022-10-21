@@ -148,10 +148,10 @@ export const Main = () => {
           ticketsNumber.current.value * 700
         }р.
           Это путешествие займет у вас 50 минут. 
-          Теплоход отправляется в 12-00, а прибудет в ${calculate(
-            eventStartTime.hours,
-            eventStartTime.minutes
-          )}.`
+          Теплоход отправляется в ${time}, а прибудет в ${calculate(
+          eventStartTime.hours,
+          eventStartTime.minutes
+        )}.`
       );
     }
   };

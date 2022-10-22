@@ -137,10 +137,24 @@ export const Main = () => {
       hour12: false,
     });
   };
+  const calculateMinus = (hours, minutes) => {
+    const start = new Date();
+    start.setHours(hours, minutes);
+    const fiftyMinutesInMillis = 50 * 60 * 1000;
+    start.setTime(start.getTime() - fiftyMinutesInMillis);
+    return start.toLocaleString("en-us", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  };
 
   const handleClick = () => {
-    if (directions[0].value === selectedDirection) {
-      let eventStartTime = timerForward.find((t) => t.value === time);
+    if (
+      directions[0].value === selectedDirection &&
+      ticketsNumber.current.value > 0
+    ) {
+      let eventStartTime = timerForward.find((t) => t.value === timeForward);
       return alert(
         `Вы выбрали ${
           ticketsNumber.current.value
@@ -148,11 +162,49 @@ export const Main = () => {
           ticketsNumber.current.value * 700
         }р.
           Это путешествие займет у вас 50 минут. 
-          Теплоход отправляется в ${time}, а прибудет в ${calculate(
+          Теплоход отправляется в ${timeForward}, а прибудет в ${calculate(
           eventStartTime.hours,
           eventStartTime.minutes
         )}.`
       );
+    }
+    if (
+      directions[1].value === selectedDirection &&
+      ticketsNumber.current.value > 0
+    ) {
+      let eventStartTime = timerBackward.find((t) => t.value === timeAdd);
+      return alert(
+        `Вы выбрали ${
+          ticketsNumber.current.value
+        } билета по маршруту из B в A стоимостью ${
+          ticketsNumber.current.value * 700
+        }р.
+          Это путешествие займет у вас 50 минут. 
+          Теплоход отправляется в ${timeAdd}, а прибудет в ${calculateMinus(
+          eventStartTime.hours,
+          eventStartTime.minutes
+        )}.`
+      );
+    } else if (ticketsNumber.current.value > 0) {
+      let eventStartTime = timerForward.find((t) => t.value === timeForward);
+      let eventReturnTime = timerBackward.find((t) => t.value === timeAdd);
+      if (timeAdd >= timeForward) {
+        return alert(
+          `Вы выбрали ${
+            ticketsNumber.current.value
+          } билета по маршруту из А в В и обратно стоимостью ${
+            ticketsNumber.current.value * 1200
+          }р.
+            Это путешествие в обе стороны займет у вас один час 40 минут. 
+            Теплоход отправляется в ${timeForward}, а прибудет в ${calculate(
+            eventStartTime.hours,
+            eventStartTime.minutes
+          )} Обратное отправление в ${timeAdd}, прибытие в ${calculateMinus(
+            eventReturnTime.hours,
+            eventReturnTime.minutes
+          )}.`
+        );
+      } else return;
     }
   };
 

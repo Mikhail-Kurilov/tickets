@@ -133,7 +133,7 @@ export const Main = () => {
         const date = new Date();
         date.setHours(hours, minutes);
         let timezoneDifference = (date.getTimezoneOffset() + MSC_TIMEZONE_OFFSET) * 60 * 1000;
-        date.setTime(date.getTime() - timezoneDifference + getArrivalInterval(isArrival));
+        date.setTime(date.getTime() - timezoneDifference + getArrivalInterval(isArrival));       
         return getDateAsLocalString(date);
     };
 
@@ -157,43 +157,23 @@ export const Main = () => {
 
     const handleClick = () => {
         if (
-            directions[0].value === selectedDirection.value &&
+            [directions[0].value, directions[1].value].includes(selectedDirection.value) &&
             ticketsNumber.current.value > 0
         ) {
             return alert(
                 `Вы выбрали ${
                     ticketsNumber.current.value
-                } билета по маршруту из A в B стоимостью ${
+                } билета по маршруту ${selectedDirection.text} стоимостью ${
                     ticketsNumber.current.value * 700
                 }р.
           Это путешествие займет у вас 50 минут. 
-          Теплоход отправляется в ${calculateTime(
-                    timeForward.hours,
-                    timeForward.minutes
-                )}, а прибудет в ${calculateTime(
-                    timeForward.hours,
-                    timeForward.minutes,
-                    true
-                )}.`
-            );
-        }
-        if (
-            directions[1].value === selectedDirection.value &&
-            ticketsNumber.current.value > 0
-        ) {
-            return alert(
-                `Вы выбрали ${
-                    ticketsNumber.current.value
-                } билета по маршруту из B в A стоимостью ${
-                    ticketsNumber.current.value * 700
-                }р.
-          Это путешествие займет у вас 50 минут. 
-          Теплоход отправляется в ${calculateTime(timeBackward.hours, timeBackward.minutes)}, 
-          а прибудет в ${calculateTime(timeBackward.hours, timeBackward.minutes, true)}.`
+          Теплоход отправляется в ${calculateTime(time.hours, time.minutes)}, 
+          а прибудет в ${calculateTime(time.hours, time.minutes, true)}.`
             );
         } else if (ticketsNumber.current.value > 0) {
-            if (constructDate(timeBackward) > constructDate(timeForward)) {
+            if (calculateTime(timeBackward.hours, timeBackward.minutes) > calculateTime(timeForward.hours, timeForward.minutes, true)) {
                 return alert(
+            
                     `Вы выбрали ${
                         ticketsNumber.current.value
                     } билета по маршруту из А в В и обратно стоимостью ${
